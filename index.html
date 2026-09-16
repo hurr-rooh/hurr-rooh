@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HURR-ROOH — Modestwear</title>
+<style>
+:root{--maroon:#641f2b;--cream:#f7f0e5;--ink:#24191b;--soft:#eadfd2}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif}
+header{position:sticky;top:0;background:rgba(247,240,229,.96);border-bottom:1px solid var(--soft);z-index:3}
+.nav{max-width:1200px;margin:auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:Georgia,serif;letter-spacing:5px;color:var(--maroon);font-size:24px;font-weight:bold}.links{display:flex;gap:20px;flex-wrap:wrap}.links button,.cart{background:none;border:0;color:var(--ink);cursor:pointer;font-size:14px}
+.hero{max-width:1200px;margin:auto;padding:80px 24px 55px;display:grid;grid-template-columns:1.1fr .9fr;gap:45px;align-items:center}
+h1{font:clamp(48px,8vw,92px) Georgia,serif;line-height:.95;color:var(--maroon);margin:10px 0}.eyebrow{text-transform:uppercase;letter-spacing:4px;font-size:12px}
+.hero p{font-size:18px;line-height:1.7;max-width:570px}.btn{display:inline-block;padding:14px 24px;background:var(--maroon);color:white;border:0;cursor:pointer;text-decoration:none;margin-top:12px}
+.hero-art{min-height:430px;background:linear-gradient(145deg,#7a2a39,#3e141d);display:flex;align-items:center;justify-content:center;color:var(--cream);font:42px Georgia,serif;letter-spacing:5px}
+section{max-width:1200px;margin:auto;padding:55px 24px}.section-title{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}h2{font:40px Georgia,serif;color:var(--maroon);margin:0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:#fffaf3;border:1px solid var(--soft);padding-bottom:18px}.pic{height:280px;background:linear-gradient(145deg,#e8dccd,#bca99a);display:flex;align-items:center;justify-content:center;color:#fff;font:24px Georgia,serif}.info{padding:14px}.name{font-weight:bold}.price{color:var(--maroon);margin-top:7px}.small{font-size:13px;color:#6d5b5e}
+.about{background:#efe5d9}.about p{max-width:760px;line-height:1.8;font-size:17px}
+footer{background:var(--maroon);color:var(--cream);padding:45px 24px}.foot{max-width:1200px;margin:auto;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cart-panel{position:fixed;right:0;top:0;height:100%;width:min(390px,100%);background:#fffaf3;box-shadow:-10px 0 30px #0002;z-index:5;padding:28px;transform:translateX(100%);transition:.25s}.cart-panel.open{transform:translateX(0)}
+.close{float:right;border:0;background:none;font-size:24px}.item{padding:16px 0;border-bottom:1px solid var(--soft)}.checkout{width:100%;padding:14px;background:var(--maroon);color:white;border:0;margin-top:20px;cursor:pointer}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:45px}.grid{grid-template-columns:repeat(2,1fr)}.links{display:none}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.pic{height:330px}}
+</style>
+</head>
+<body>
+<header><nav class="nav"><div class="logo">HURR-ROOH</div><div class="links">
+<button onclick="go('shop')">Shop All</button><button onclick="go('women')">Women</button><button onclick="go('unisex')">Men / Unisex</button><button onclick="go('tops')">Tops & Sets</button><button onclick="go('bottoms')">Bottoms</button><button onclick="go('about')">About</button>
+</div><button class="cart" onclick="toggleCart()">Bag (<span id="count">0</span>)</button></nav></header>
+
+<main>
+<div class="hero"><div><div class="eyebrow">Modern modestwear · For everyone</div><h1>Modesty,<br>reimagined.</h1><p>HURR-ROOH creates soft, contemporary modest pieces designed to move with you — thoughtful silhouettes, calm colors, and everyday elegance for every soul.</p><button class="btn" onclick="go('shop')">Shop the collection</button></div><div class="hero-art">HURR<br>ROOH</div></div>
+
+<section id="shop"><div class="section-title"><h2>Featured collection</h2><span class="small">New season · 2026</span></div><div class="grid" id="products"></div></section>
+
+<section id="about" class="about"><h2>About HURR-ROOH</h2><p>HURR-ROOH is a modern modest-fashion concept built around comfort, dignity, and self-expression. Our unisex approach makes room for different wardrobes and different ways of dressing, while our soft feminine details keep every piece refined.</p></section>
+
+<section id="contact"><h2>Contact</h2><p class="small">Questions about sizing, orders, or becoming part of HURR-ROOH? Email hello@hurr-rooh.com</p></section>
+</main>
+
+<footer><div class="foot"><div><b>HURR-ROOH</b><br><span class="small">Modern modestwear for every soul.</span></div><div>Shipping & Returns · Privacy · Terms</div></div></footer>
+
+<aside class="cart-panel" id="cart"><button class="close" onclick="toggleCart()">×</button><h2>Your bag</h2><div id="items"></div><strong>Total: $<span id="total">0</span></strong><button class="checkout" onclick="checkout()">Checkout</button></aside>
+
+<script>
+const products=[
+{name:"Noor Oversized Set",price:68,cat:"unisex",desc:"Relaxed modest co-ord in soft cream."},
+{name:"Ruh Longline Shirt",price:54,cat:"tops",desc:"Clean longline silhouette in deep maroon."},
+{name:"Safa Wide-Leg Trouser",price:58,cat:"bottoms",desc:"Flowing everyday trouser with a polished finish."},
+{name:"Amani Everyday Set",price:72,cat:"women",desc:"Soft feminine layers with an easy modest fit."}
+];
+let bag=[];
+function render(filter="all"){document.getElementById("products").innerHTML=products.filter(p=>filter==="all"||p.cat===filter).map((p,i)=>`<article class="card"><div class="pic">HURR-ROOH</div><div class="info"><div class="name">${p.name}</div><div class="small">${p.desc}</div><div class="price">$${p.price}</div><button class="btn" style="width:100%;padding:10px" onclick="add(${i})">Add to bag</button></div></article>`).join("")}
+function add(i){bag.push(products[i]);update();toggleCart(true)}
+function update(){document.getElementById("count").textContent=bag.length;document.getElementById("items").innerHTML=bag.length?bag.map((p,i)=>`<div class="item"><b>${p.name}</b><br>$${p.price} <button onclick="bag.splice(${i},1);update()">Remove</button></div>`).join(""):"<p>Your bag is empty.</p>";document.getElementById("total").textContent=bag.reduce((s,p)=>s+p.price,0)}
+function toggleCart(force){document.getElementById("cart").classList.toggle("open",force===true?!document.getElementById("cart").classList.contains("open"):undefined)}
+function go(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"});if(["women","unisex","tops","bottoms"].includes(id))render(id)}
+function checkout(){alert("Demo checkout: connect Stripe/Shopify Payments or another payment provider before accepting real orders.");}
+render();update();
+</script>
+</body></html>
